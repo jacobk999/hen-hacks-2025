@@ -1,31 +1,32 @@
 "use client";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import { UnitedStatesFlag, FranceFlag, GermanFlag, SpainFlag, VietnamFlag } from "~/components/icons/flags";
+import { UnitedStatesFlag, FranceFlag, GermanFlag, SpainFlag, IndianFlag } from "~/components/icons/flags";
+import { cn } from "~/lib/utils";
 
-export function LanguagePicker({ language, onLanguageChange }: { language: string; onLanguageChange: (language: string) => void }) {
+export function LanguagePicker({ language, onLanguageChange, disable, className }: { language: string; disable?: string; onLanguageChange: (language: string) => void; className?: string }) {
 	return (
 		<Select value={language} onValueChange={onLanguageChange}>
-			<SelectTrigger className="w-[160px]">
+			<SelectTrigger className={cn("w-[160px]", className)}>
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>
-				<SelectItem value="english">
+				<SelectItem value="english" disabled={disable === "english"}>
 					<UnitedStatesFlag /> English
 				</SelectItem>
-				<SelectItem value="spanish">
+				<SelectItem value="spanish" disabled={disable === "spanish"}>
 					<SpainFlag /> Spanish
 				</SelectItem>
-				<SelectItem value="french">
+				<SelectItem value="french" disabled={disable === "french"}>
 					<FranceFlag /> French
 				</SelectItem>
-				<SelectItem value="german">
+				<SelectItem value="german" disabled={disable === "german"}>
 					<GermanFlag />
 					German
 				</SelectItem>
-				<SelectItem value="vietnamese">
-					<VietnamFlag />
-					Vietnamese
+				<SelectItem value="hindi" disabled={disable === "hindi"}>
+					<IndianFlag />
+					Hindi
 				</SelectItem>
 			</SelectContent>
 		</Select>

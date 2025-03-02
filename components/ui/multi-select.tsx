@@ -1,11 +1,4 @@
-// src/components/multi-select.tsx
-
 import { cva, type VariantProps } from "class-variance-authority";
-import {
-	XCircle,
-	XIcon,
-} from "lucide-react";
-
 import { cn } from "~/lib/utils";
 import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
@@ -166,8 +159,6 @@ export function MultiSelect({
 		onValueChange(newSelectedValues);
 	};
 
-	console.log(isPopoverOpen)
-
 	return (
 		<Popover
 			open={isPopoverOpen}
@@ -221,24 +212,22 @@ export function MultiSelect({
 										)}
 									>
 										{`+ ${selectedValues.length - maxCount} more`}
-										<XCircle
-											className="ml-2 h-4 w-4 cursor-pointer"
-											onClick={(event) => {
-												event.stopPropagation();
-												clearExtraOptions();
-											}}
-										/>
+										<div className="cursor-pointer" onClick={(event) => {
+											event.stopPropagation();
+											clearExtraOptions();
+										}}>
+											<MultipleCrossCancelDefault variant="stroke" />
+										</div>
 									</Badge>
 								)}
 							</div>
 							<div className="flex items-center justify-between">
-								<XIcon
-									className="h-4 mx-2 cursor-pointer text-muted-foreground"
-									onClick={(event) => {
-										event.stopPropagation();
-										handleClear();
-									}}
-								/>
+								<div className="text-muted-foreground mx-2" onClick={(event) => {
+									event.stopPropagation();
+									handleClear();
+								}}>
+									<MultipleCrossCancelDefault variant="stroke" />
+								</div>
 								<Separator
 									orientation="vertical"
 									className="flex min-h-6 h-full"

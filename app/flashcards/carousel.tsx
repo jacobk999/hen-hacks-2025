@@ -35,7 +35,7 @@ function Card({ card }: {
 	const [flipped, setFlipped] = useState(false);
 
 	return (
-		<div onClick={() => setFlipped(flipped => !flipped)} className="w-150 h-50 text-5xl font-semibold font-header">
+		<div onClick={() => setFlipped(flipped => !flipped)} className="w-150 h-80 text-5xl font-semibold font-header">
 			<div className="relative w-full h-full transform-3d transition-transform text-center" style={{
 				transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)"
 			}}>

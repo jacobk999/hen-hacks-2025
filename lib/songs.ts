@@ -1,7 +1,6 @@
 import type { AiMediaProvider } from "~/lib/common";
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 import { z } from "zod";
-import Genius from "genius-lyrics";
 
 export interface Song {
 	id: string;
@@ -29,11 +28,9 @@ export interface SongQuery {
 
 export class SongsProvider implements AiMediaProvider<SongQuery, Song> {
 	#sdk: SpotifyApi;
-	#genius: Genius.Client;
 
 	constructor(clientId: string, clientSecret: string) {
 		this.#sdk = SpotifyApi.withClientCredentials(clientId, clientSecret, []);
-		this.#genius = new Genius.Client();
 	}
 
 	querySchema() {
@@ -43,8 +40,6 @@ export class SongsProvider implements AiMediaProvider<SongQuery, Song> {
 	async getByQuery(query: SongQuery): Promise<Song | undefined> {
 		const response = await this.#sdk.search(query.name + " " + query.artist, ["track"], "US", 1);
 		const song = response.tracks.items[0];
-
-		console.log(song);
 
 		return {
 			id: song.id,
@@ -63,10 +58,5 @@ export class SongsProvider implements AiMediaProvider<SongQuery, Song> {
 				url: artist.external_urls.spotify
 			}))
 		}
-	}
-	async getLyrics(songName: string) {
-		const searches = await this.#genius.songs.search(songName)
-		const song0 = searches[0];
-		return await song0.lyrics();
 	}
 }

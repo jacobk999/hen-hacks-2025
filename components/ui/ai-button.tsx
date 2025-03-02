@@ -2,14 +2,14 @@ import { ComponentProps } from "react";
 import "./ai-button.css";
 import { Spinner } from "~/components/icons/spinner";
 
-export function AiButton({ loading, ...props }: Omit<ComponentProps<"button">, "className" | "children"> & { loading?: boolean }) {
+export function AiButton({ loading, children = "Recommend", ...props }: Omit<ComponentProps<"button">, "className" | "children"> & { loading?: boolean; children?: string }) {
 	return (
 		<div className="ai-border group" aria-disabled={loading}>
 			<button {...props} className="ai-button font-sans">
 				<div className="absolute z-50 flex items-center justify-center gap-1.5">
-					{loading ? <Spinner /> : <><Ai /> Recommend</>}
+					{loading ? <Spinner /> : <><Ai /> {children}</>}
 				</div>
-				<div className="invisible flex items-center gap-1.5"><Ai /> Recommend</div>
+				<div className="invisible flex items-center gap-1.5"><Ai /> {children}</div>
 			</button >
 		</div >
 	);

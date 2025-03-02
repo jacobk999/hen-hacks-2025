@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { NotFound } from "~/components/icons/not-found";
 import { Notebook } from "~/components/icons/notebook";
 import { AiButton } from "~/components/ui/ai-button";
 import { LanguagePicker } from "~/components/ui/language-picker";
 import { MultiSelect } from "~/components/ui/multi-select";
+import { Nav } from "~/components/ui/nav";
 import { getBooks } from "~/lib/actions";
 import { Book } from "~/lib/books";
 
@@ -39,12 +41,15 @@ export default function BooksPage() {
 	}, { resources: [] });
 
 	return (
-		<div className="flex flex-col gap-4 w-[80%] mx-auto py-4">
-			<div className="flex items-center gap-2">
-				<div className="bg-gradient-to-br from-slate-800/70 to-slate-600/70 border-2 border-slate-900 w-12 h-12 [&>svg]:size-6 flex justify-center items-center rounded-xl [&>svg]:text-white [&>svg]:mix-blend-overlay brightness-125">
-					<Notebook variant="stroke" />
+		<div className="flex flex-col gap-4 w-[80%] h-full mx-auto py-4">
+			<div className="flex justify-between items-center">
+				<div className="flex items-center gap-2">
+					<div className="bg-gradient-to-br from-slate-800/70 to-slate-600/70 border-2 border-slate-900 w-12 h-12 [&>svg]:size-6 flex justify-center items-center rounded-xl [&>svg]:text-white [&>svg]:mix-blend-overlay brightness-125">
+						<Notebook variant="stroke" />
+					</div>
+					<h1 className="font-header text-4xl uppercase">Books</h1>
 				</div>
-				<h1 className="font-header text-4xl uppercase">Books</h1>
+				<Nav />
 			</div>
 			<form className="flex items-center gap-4" action={action}>
 				<LanguagePicker language={language} onLanguageChange={setLanguage} />
@@ -57,11 +62,9 @@ export default function BooksPage() {
 				/>
 				<AiButton type="submit" loading={isLoading} />
 			</form>
-			<div className="flex flex-col gap-4">
-				{state.resources.map(book => (
-					<BookCard book={book} key={book.id} />
-				))}
-			</div>
+			{state.resources.length > 0 ? state.resources.map(book => (
+				<div className="flex flex-col gap-4"><BookCard book={book} key={book.id} /></div>
+			)) : <NotFound icon={Notebook}>Select book genres to get started</NotFound>}
 		</div>
 	);
 }

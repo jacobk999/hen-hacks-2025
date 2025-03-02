@@ -1,10 +1,20 @@
 "use server";
 
-import { aiRecommendations } from "./ai";
+import { aiFlashcards, aiRecommendations } from "./ai";
 import { MoviesProvider } from "./movies";
 import { SongsProvider } from "./songs";
 import { BooksProvider } from "./books";
-import { writeFileSync } from "fs";
+
+declare global {
+	namespace NodeJS {
+		interface ProcessEnv {
+			SPOTIFY_ClIENT_ID: string;
+			SPOTIFY_CLIENT_SECRET: string;
+			TMDB_API_KEY: string;
+			GOOGLE_BOOKS_API_KEY: string;
+		}
+	}
+}
 
 const movieProvider = new MoviesProvider(process.env.TMDB_API_KEY);
 
@@ -18,7 +28,7 @@ export async function getMovies(genres: string[], targetLanguage: string) {
 	})
 }
 
-const songProvider = new SongsProvider(process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET);
+const songProvider = new SongsProvider(process.env.SPOTIFY_CLIENT_ID!, process.env.SPOTIFY_CLIENT_SECRET);
 
 export async function getSongs(genres: string[], targetLanguage: string) {
 	const songs = await aiRecommendations({
@@ -35,15 +45,15 @@ export async function getSongs(genres: string[], targetLanguage: string) {
 const bookProvider = new BooksProvider(process.env.GOOGLE_BOOKS_API_KEY);
 
 export async function getBooks(genres: string[], targetLanguage: string) {
-	const books = await aiRecommendations({
+	return aiRecommendations({
 		provider: bookProvider,
 		media: "book",
 		limit: 5,
 		genres,
 		targetLanguage
 	});
+}
 
-	writeFileSync("books.json", JSON.stringify(books));
-
-	return books;
+export async function getFlashcards(knownLanguage: string, targetLanguage: string) {
+	return aiFlashcards(targetLanguage, knownLanguage, 5);
 }

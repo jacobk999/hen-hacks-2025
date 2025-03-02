@@ -1,5 +1,5 @@
 import type { AiMediaProvider } from "~/lib/common";
-import googleBooks from "@googleapis/books";
+import * as googleBooks from "@googleapis/books";
 import { z } from "zod";
 
 export interface Book {
@@ -42,14 +42,14 @@ export class BooksProvider implements AiMediaProvider<BookQuery, Book> {
 		if (!volume) return undefined;
 
 		return {
-			id: volume.id,
-			name: volume.volumeInfo?.title,
+			id: volume.id!,
+			name: volume.volumeInfo?.title!,
 			authors: volume.volumeInfo?.authors ?? [],
-			coverUrl: volume.volumeInfo?.imageLinks?.thumbnail,
-			description: volume.volumeInfo?.description,
-			pages: volume.volumeInfo?.pageCount,
-			publishedAt: volume.volumeInfo?.publishedDate,
-			url: volume.volumeInfo?.infoLink
+			coverUrl: volume.volumeInfo?.imageLinks?.thumbnail!,
+			description: volume.volumeInfo?.description!,
+			pages: volume.volumeInfo?.pageCount!,
+			publishedAt: volume.volumeInfo?.publishedDate!,
+			url: volume.volumeInfo?.infoLink!
 		};
 	}
 }

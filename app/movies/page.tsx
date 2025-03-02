@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Film } from "~/components/icons/flim";
+import { NotFound } from "~/components/icons/not-found";
 import { AiButton } from "~/components/ui/ai-button";
 import { LanguagePicker } from "~/components/ui/language-picker";
 import { MultiSelect } from "~/components/ui/multi-select";
+import { Nav } from "~/components/ui/nav";
 import { getMovies } from "~/lib/actions";
 import type { Movie as MovieCard } from "~/lib/movies";
 
@@ -32,12 +34,15 @@ export default function MoviesPage() {
 	}, { resources: [] });
 
 	return (
-		<div className="flex flex-col gap-4 w-[80%] mx-auto py-4">
-			<div className="flex items-center gap-2 [&_svg]:size-8">
-				<div className="bg-gradient-to-br from-slate-800/70 to-slate-600/70 border-2 border-slate-900 w-12 h-12 [&>svg]:size-6 flex justify-center items-center rounded-xl [&>svg]:text-white [&>svg]:mix-blend-overlay brightness-125">
-					<Film variant="stroke" />
+		<div className="flex flex-col gap-4 w-[80%] h-full mx-auto py-4">
+			<div className="flex justify-between items-center">
+				<div className="flex items-center gap-2 [&_svg]:size-8">
+					<div className="bg-gradient-to-br from-slate-800/70 to-slate-600/70 border-2 border-slate-900 w-12 h-12 [&>svg]:size-6 flex justify-center items-center rounded-xl [&>svg]:text-white [&>svg]:mix-blend-overlay brightness-125">
+						<Film variant="stroke" />
+					</div>
+					<h1 className="font-header text-4xl uppercase">Movies</h1>
 				</div>
-				<h1 className="font-header text-4xl uppercase">Movies</h1>
+				<Nav />
 			</div>
 			<form className="flex items-center gap-4" action={action}>
 				<LanguagePicker language={language} onLanguageChange={setLanguage} />
@@ -50,11 +55,9 @@ export default function MoviesPage() {
 				/>
 				<AiButton type="submit" loading={isLoading} />
 			</form>
-			<div className="flex flex-wrap gap-4">
-				{state.resources.map(movie => (
-					<MovieCard movie={movie} key={movie.id} />
-				))}
-			</div>
+			{state.resources.length > 0 ? <div className="flex flex-wrap gap-4">{state.resources.map(movie => (
+				<MovieCard movie={movie} key={movie.id} />
+			))}</div> : <NotFound icon={Film}>Select movie genres to get started</NotFound>}
 		</div>
 	);
 }

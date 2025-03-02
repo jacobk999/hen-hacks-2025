@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { MusicBeamNote } from "~/components/icons/music-beam-note";
+import { NotFound } from "~/components/icons/not-found";
 import { AiButton } from "~/components/ui/ai-button";
 import { LanguagePicker } from "~/components/ui/language-picker";
 import { MultiSelect } from "~/components/ui/multi-select";
+import { Nav } from "~/components/ui/nav";
 import { getSongs } from "~/lib/actions";
 import { Song } from "~/lib/songs";
 
@@ -29,9 +31,6 @@ const songGenres = [
 	{ label: "Folk", value: "foulk", color: "bg-lime-950/40 border-pink-800" },
 	{ label: "Punk", value: "punk", color: "bg-slate-900/40 border-pink-800" },
 	{ label: "Blues", value: "blue", color: "bg-blue-600/40 border-pink-800" }
-
-
-
 ];
 
 export default function SongsPage() {
@@ -44,12 +43,15 @@ export default function SongsPage() {
 	}, { resources: [] });
 
 	return (
-		<div className="flex flex-col gap-4 w-[80%] mx-auto py-4">
-			<div className="flex items-center gap-2">
-				<div className="bg-gradient-to-br from-slate-800/70 to-slate-600/70 border-2 border-slate-900 w-12 h-12 [&>svg]:size-6 flex justify-center items-center rounded-xl [&>svg]:text-white [&>svg]:mix-blend-overlay brightness-125">
-					<MusicBeamNote variant="stroke" />
+		<div className="flex flex-col gap-4 w-[80%] h-full mx-auto py-4">
+			<div className="flex justify-between items-center">
+				<div className="flex items-center gap-2">
+					<div className="bg-gradient-to-br from-slate-800/70 to-slate-600/70 border-2 border-slate-900 w-12 h-12 [&>svg]:size-6 flex justify-center items-center rounded-xl [&>svg]:text-white [&>svg]:mix-blend-overlay brightness-125">
+						<MusicBeamNote variant="stroke" />
+					</div>
+					<h1 className="font-header text-4xl uppercase">Songs</h1>
 				</div>
-				<h1 className="font-header text-4xl uppercase">Songs</h1>
+				<Nav />
 			</div>
 			<form className="flex items-center gap-4" action={action}>
 				<LanguagePicker language={language} onLanguageChange={setLanguage} />
@@ -62,12 +64,10 @@ export default function SongsPage() {
 				/>
 				<AiButton type="submit" loading={isLoading} />
 			</form>
-			<div className="flex flex-col gap-4">
-				{state.resources.map(song => (
-					<SongCard song={song} key={song.id} />
-				))}
-			</div>
-		</div>
+			{state.resources.length > 0 ? <div className="flex flex-col gap-4">{state.resources.map(song => (
+				<SongCard song={song} key={song.id} />
+			))}</div> : <NotFound icon={MusicBeamNote}>Select music genres to get started</NotFound>}
+		</div >
 	);
 }
 
@@ -89,7 +89,7 @@ function SongCard({ song }: { song: Song }) {
 			<div className="flex flex-col justify-center max-w-3/5 p-2 truncate z-10">
 				<div className="flex gap-2">
 					<Link href={song.url} className="text-lg font-semibold font-header hover:underline">{song.name}</Link>
-					{song.isExplicit && <div>E</div>}
+					{song.isExplicit && <div className="font-header font-semibold bg-slate-800/70 px-2 py-0.5 rounded-sm">E</div>}
 				</div>
 				<Link href={song.album.url} className="text-slate-400 hover:underline">{song.album.name}</Link>
 				<div className="flex gap-2 text-slate-400">
