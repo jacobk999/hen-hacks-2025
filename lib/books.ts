@@ -40,6 +40,7 @@ export class BooksProvider implements AiMediaProvider<BookQuery, Book> {
 		const volume = response.data.items?.[0];
 
 		if (!volume) return undefined;
+		if (!volume.volumeInfo?.imageLinks?.thumbnail) return undefined;
 
 		return {
 			id: volume.id!,

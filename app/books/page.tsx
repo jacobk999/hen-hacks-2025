@@ -28,7 +28,7 @@ const bookGenres = [
 	{ label: "Motivational", value: "motivational", color: "bg-rose-950/40 border-pink-800" },
 	{ label: "Sports", value: "sports", color: "bg-lime-950/40 border-pink-800" },
 	{ label: "Cooking", value: "cook", color: "bg-slate-900/40 border-pink-800" },
-	{ label: "Childrens", value: "childrens", color: "bg-blue-600/40 border-pink-800" }
+	{ label: "Childrens", value: "childrens", color: "bg-blue-600/40 border-blue-800" }
 ];
 
 export default function BooksPage() {

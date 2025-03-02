@@ -22,7 +22,7 @@ export async function getMovies(genres: string[], targetLanguage: string) {
 	return aiRecommendations({
 		provider: movieProvider,
 		media: "movie",
-		limit: 5,
+		limit: 10,
 		genres,
 		targetLanguage
 	})
