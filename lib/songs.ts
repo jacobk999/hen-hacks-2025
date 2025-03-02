@@ -7,12 +7,19 @@ export interface Song {
 	id: string;
 	name: string;
 	url: string;
+	coverUrl: string;
+	isExplicit: boolean;
 
-	artist: {
+	album: {
+		name: string;
+		url: string;
+	}
+
+	artists: {
 		id: string;
 		name: string;
 		url: string;
-	};
+	}[];
 }
 
 export interface SongQuery {
@@ -37,16 +44,24 @@ export class SongsProvider implements AiMediaProvider<SongQuery, Song> {
 		const response = await this.#sdk.search(query.name + " " + query.artist, ["track"], "US", 1);
 		const song = response.tracks.items[0];
 
+		console.log(song);
+
 		return {
 			id: song.id,
 			name: song.name,
-			url: song.uri,
+			url: song.external_urls.spotify,
+			coverUrl: song.album.images[0].url,
+			isExplicit: song.explicit,
+			album: {
+				name: song.album.name,
+				url: song.album.external_urls.spotify
+			},
 
-			artist: {
-				id: song.artists[0].id,
-				name: song.artists[0].name,
-				url: song.artists[0].uri
-			}
+			artists: song.artists.map(artist => ({
+				id: artist.id,
+				name: artist.name,
+				url: artist.external_urls.spotify
+			}))
 		}
 	}
 	async getLyrics(songName: string) {

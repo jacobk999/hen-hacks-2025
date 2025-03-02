@@ -1,8 +1,8 @@
 import { z } from "zod";
 import type { AiMediaProvider } from "~/lib/common";
-
 export interface Movie {
 	id: string;
+	imdbURL: string;
 	name: string;
 	description: string;
 
@@ -36,8 +36,11 @@ export class MoviesProvider implements AiMediaProvider<MovieQuery, Movie> {
 
 		const movie = results[0];
 
+		const externalIds = await this.#request(`/movie/${movie.id}/external_ids`);
+
 		return {
 			id: movie.id,
+			imdbURL: "https://www.imdb.com/title/" + externalIds.imdb_id,
 			name: movie.title,
 			description: movie.overview,
 
@@ -59,7 +62,9 @@ export class MoviesProvider implements AiMediaProvider<MovieQuery, Movie> {
 		return response.json();
 	}
 
-	async getMeMyTrailers(name: string) {
-		let dopeUrl: string = "http://api.themoviedb.org/3/movie/157336/videos?api_key=" + this.#tmDbApiKey;
+	async getMeMyTrailers(id: string) {
+		let dopeUrl: string = "http://api.themoviedb.org/3/movie/" + id + "/videos?api_key=" + this.#tmDbApiKey;
+		let x = fetch(dopeUrl);
+		return Response.json(x);
 	}
 }

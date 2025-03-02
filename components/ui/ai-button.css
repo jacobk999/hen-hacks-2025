@@ -1,0 +1,125 @@
+@property --gradient-angle {
+	syntax: "<angle>";
+	initial-value: 0deg;
+	inherits: false;
+}
+
+@keyframes spinny {
+	0% {
+		--gradient-angle: 0deg;
+	}
+
+	100% {
+		--gradient-angle: 360deg;
+	}
+}
+
+.ai-border {
+	cursor: pointer;
+	color: #fffffff0;
+	border-radius: 12px;
+	background: transparent;
+	padding: 1px;
+	box-shadow: 0 0 0 0px #552db194, 0 0 0 0 #1d293d;
+	transition: all 200ms;
+
+	&[aria-disabled="true"] {
+		pointer-events: none;
+		opacity: 50;
+	}
+}
+
+
+.ai-border>* {
+	cursor: pointer;
+}
+
+.ai-button {
+	background: #1d293d;
+	position: relative;
+	overflow: hidden;
+	padding: 8px 16px;
+	border-radius: 12px;
+	font-weight: normal;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	width: 160px;
+	transition: all 200ms;
+}
+
+.ai-button::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 12px;
+	background: radial-gradient(ellipse at bottom, #b172fe 0%, #793aff 80%);
+	opacity: 0;
+	transition: all 500ms;
+	box-shadow: inset 0 0px 0 0 #8752fc, inset 0 0px 0 0 #7735ff;
+	border: 0.5px solid #9169e9;
+}
+
+.ai-border:hover {
+	color: #ffffff;
+	animation: spinny 2s linear infinite;
+	background: conic-gradient(from var(--gradient-angle) at 50% 50%, transparent 320deg, #ffffff80 320deg), radial-gradient(ellipse at bottom, #b172fe 0%, #793aff 80%);
+	scale: 1.1;
+	box-shadow: 0 0 0 3px #552db194, 0 0 50px 20px #2f1465;
+
+	.ai-button {
+		font-weight: 600;
+	}
+
+	.ai-button::before {
+		box-shadow: inset 0 1px 0 0 #8752fc, inset 0 -1px 0 0 #7735ff;
+		opacity: 1;
+	}
+}
+
+.ai-svg-1,
+.ai-svg-2,
+.ai-svg-3 {
+	transform-origin: center;
+	transform-box: fill-box;
+	animation-name: sparkly;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-play-state: paused;
+}
+
+@keyframes sparkly {
+
+	0%,
+	100% {
+		scale: 1;
+	}
+
+	50% {
+		scale: 1.2;
+	}
+}
+
+.ai-svg {
+	width: 20px;
+	height: 20px;
+
+	&:is(:where(.group):hover *) {
+		@media (hover: hover) {
+			.ai-svg-1 {
+				animation-delay: 0s;
+				animation-play-state: running;
+			}
+
+			.ai-svg-2 {
+				animation-delay: 0.2s;
+				animation-play-state: running;
+			}
+
+			.ai-svg-3 {
+				animation-delay: 0.4s;
+				animation-play-state: running;
+			}
+		}
+	}
+}

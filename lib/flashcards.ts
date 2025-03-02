@@ -11,8 +11,9 @@ export function createCards(card: Map<string, string>) {
 		notTemp.push(`${key}@${value}`);
 		x++;
 	}
+	return notTemp;
 }
-export async function quizYourMom(cards: string[]) {
+export async function quizYou(cards: string[]) {
 	let x: number = Math.floor(Math.random() * (cards.length + 1));
 	return cards[x];
 }

@@ -9,7 +9,7 @@ export interface Book {
 	publishedAt: string;
 	pages: number;
 	authors: string[];
-	cover: string;
+	coverUrl: string;
 	url: string;
 }
 
@@ -31,20 +31,21 @@ export class BooksProvider implements AiMediaProvider<BookQuery, Book> {
 		return z.object({ name: z.string(), author: z.string() })
 	}
 
-	async getByQuery(query: BookQuery): Promise<Book> {
+	async getByQuery(query: BookQuery): Promise<Book | undefined> {
 		const response = await this.#sdk.volumes.list({
 			q: `intitle:${query.name} inauthor:${query.author}`,
 			auth: this.#apiKey
 		});
 
-		const volume = response.data.items[0];
+		const volume = response.data.items?.[0];
 
+		if (!volume) return undefined;
 
 		return {
 			id: volume.id,
 			name: volume.volumeInfo?.title,
-			authors: volume.volumeInfo?.authors,
-			cover: volume.volumeInfo?.imageLinks?.thumbnail,
+			authors: volume.volumeInfo?.authors ?? [],
+			coverUrl: volume.volumeInfo?.imageLinks?.thumbnail,
 			description: volume.volumeInfo?.description,
 			pages: volume.volumeInfo?.pageCount,
 			publishedAt: volume.volumeInfo?.publishedDate,

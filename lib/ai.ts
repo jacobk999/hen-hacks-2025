@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import { generateObject } from 'ai';
+import { generateObject, generateText } from 'ai';
 import z from "zod";
 import type { AiMediaProvider } from './common';
 
@@ -70,5 +70,14 @@ export async function aiFlashcard(targetLanguage: string, knownLanguage: string,
 	}
 
 	return hashmap;
+}
+
+export async function aiChat(prompt: string) {
+	const { text } = await generateText({
+		model,
+		prompt: prompt,
+	});
+
+	return text;
 }
 
