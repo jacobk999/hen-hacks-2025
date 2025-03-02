@@ -1,5 +1,5 @@
 import { SongsProvider } from "../lib/songs.ts";
-import { aiRecommendations, aiFlashcard } from "../lib/ai.ts";
+import { aiRecommendations, aiFlashcards } from "../lib/ai.ts";
 //import { MoviesProvider } from "../lib/movies.ts"
 import z from "zod";
 
@@ -30,7 +30,7 @@ const songs = await aiRecommendations({
 });
 */
 
-const cards = await aiFlashcard(
+const cards = await aiFlashcards(
 	"spanish", //targetLanguage
 	"english", //knownLanguage
 	5 //count

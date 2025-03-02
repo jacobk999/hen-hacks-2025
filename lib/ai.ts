@@ -28,7 +28,8 @@ export async function aiRecommendations<Query, Resource extends { name: string }
 
 	const { object: queries } = await generateObject({
 		model,
-		schema: z.array(provider.querySchema()),
+		output: "array",
+		schema: provider.querySchema(),
 		system: `Only give recommendations that are HIGHLY related and RELEVANT to the query being asked. Every recommendation should be in the ${targetLanguage} language and accessible for beginner learners in ${targetLanguage} to understand. If the recommendation is not in ${targetLanguage} try again. All responses should exclude items from ${excludedMedia.join(", ")}`,
 		prompt: `Give me ${limit} ${media} recommendations. The recommendations should be VERY related to ${genres.join(", ")}. `
 	});
@@ -50,10 +51,9 @@ function addMediaExclusions(media: Media, limit: number, items: string[]) {
 }
 
 
-let pastCards: string[] = [];
+const pastCards: Set<string> = new Set();
 
-export async function aiFlashcard(targetLanguage: string, knownLanguage: string, cards: number) {
-	let hashmap: Map<string, string> = new Map()
+export async function aiFlashcards(targetLanguage: string, knownLanguage: string, cards: number) {
 	const { object } = await generateObject({
 		model,
 		output: 'array',
@@ -61,15 +61,13 @@ export async function aiFlashcard(targetLanguage: string, knownLanguage: string,
 			foreignText: z.string(),
 			knownText: z.string()
 		}),
-		system: `Exclude any of the listed phrases: ${pastCards}`,
-		prompt: `Provide a common phrase(s) in ${targetLanguage} and in ${knownLanguage}`
+		system: `Exclude any of the listed phrases: ${[...pastCards.values()].join(", ")}`,
+		prompt: `Provide ${cards} common phrase(s) in ${targetLanguage} and in ${knownLanguage}`
 	});
-	for (let i = 0; i < cards; i++) {
-		pastCards.push(object[i].foreignText)
-		hashmap.set(object[i].knownText, object[i].foreignText);
-	}
 
-	return hashmap;
+	object.forEach((card) => pastCards.add(card.foreignText));
+
+	return object;
 }
 
 export async function aiChat(prompt: string) {
