@@ -29,7 +29,7 @@ export async function aiRecommendations<Query, Resource extends { name: string }
 	const { object: queries } = await generateObject({
 		model,
 		schema: z.array(provider.querySchema()),
-		system: `Only give recommendations that are HIGHLY related and RELEVANT to the query being asked. Every recommendation should be in ${targetLanguage} and accessible for beginner learners in ${targetLanguage} to understand. All responses should exclude items from ${excludedMedia.join(", ")}`,
+		system: `Only give recommendations that are HIGHLY related and RELEVANT to the query being asked. Every recommendation should be in the ${targetLanguage} language and accessible for beginner learners in ${targetLanguage} to understand. If the recommendation is not in ${targetLanguage} try again. All responses should exclude items from ${excludedMedia.join(", ")}`,
 		prompt: `Give me ${limit} ${media} recommendations. The recommendations should be VERY related to ${genres.join(", ")}. `
 	});
 

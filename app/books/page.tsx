@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Notebook } from "~/components/icons/notebook";
 import { AiButton } from "~/components/ui/ai-button";
+import { LanguagePicker } from "~/components/ui/language-picker";
 import { MultiSelect } from "~/components/ui/multi-select";
 import { getBooks } from "~/lib/actions";
 import { Book } from "~/lib/books";
@@ -30,9 +31,10 @@ const bookGenres = [
 
 export default function BooksPage() {
 	const [genres, setGenres] = useState<string[]>([]);
+	const [language, setLanguage] = useState<string>("english");
 
 	const [state, action, isLoading] = useActionState(async () => {
-		const resources = await getBooks(genres, "english");
+		const resources = await getBooks(genres, language);
 		return { resources }
 	}, { resources: [] });
 
@@ -45,6 +47,7 @@ export default function BooksPage() {
 				<h1 className="font-header text-4xl uppercase">Books</h1>
 			</div>
 			<form className="flex items-center gap-4" action={action}>
+				<LanguagePicker language={language} onLanguageChange={setLanguage} />
 				<MultiSelect
 					className="grow"
 					placeholder="Select genres"
@@ -52,7 +55,7 @@ export default function BooksPage() {
 					options={bookGenres}
 					maxCount={10}
 				/>
-				<AiButton type="submit" disabled={isLoading} />
+				<AiButton type="submit" loading={isLoading} />
 			</form>
 			<div className="flex flex-col gap-4">
 				{state.resources.map(book => (

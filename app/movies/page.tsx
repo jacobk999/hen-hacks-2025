@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Film } from "~/components/icons/flim";
 import { AiButton } from "~/components/ui/ai-button";
+import { LanguagePicker } from "~/components/ui/language-picker";
 import { MultiSelect } from "~/components/ui/multi-select";
 import { getMovies } from "~/lib/actions";
 import type { Movie as MovieCard } from "~/lib/movies";
@@ -23,9 +24,10 @@ const movieGenres = [
 
 export default function MoviesPage() {
 	const [genres, setGenres] = useState<string[]>([]);
+	const [language, setLanguage] = useState<string>("english");
 
 	const [state, action, isLoading] = useActionState(async () => {
-		const resources = await getMovies(genres, "english")
+		const resources = await getMovies(genres, language)
 		return { resources }
 	}, { resources: [] });
 
@@ -38,6 +40,7 @@ export default function MoviesPage() {
 				<h1 className="font-header text-4xl uppercase">Movies</h1>
 			</div>
 			<form className="flex items-center gap-4" action={action}>
+				<LanguagePicker language={language} onLanguageChange={setLanguage} />
 				<MultiSelect
 					className="grow"
 					placeholder="Select genres"

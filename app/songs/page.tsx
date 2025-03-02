@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { MusicBeamNote } from "~/components/icons/music-beam-note";
 import { AiButton } from "~/components/ui/ai-button";
+import { LanguagePicker } from "~/components/ui/language-picker";
 import { MultiSelect } from "~/components/ui/multi-select";
 import { getSongs } from "~/lib/actions";
 import { Song } from "~/lib/songs";
@@ -35,9 +36,10 @@ const songGenres = [
 
 export default function SongsPage() {
 	const [genres, setGenres] = useState<string[]>([]);
+	const [language, setLanguage] = useState<string>("english");
 
 	const [state, action, isLoading] = useActionState(async () => {
-		const resources = await getSongs(genres, "english");
+		const resources = await getSongs(genres, language);
 		return { resources }
 	}, { resources: [] });
 
@@ -50,6 +52,7 @@ export default function SongsPage() {
 				<h1 className="font-header text-4xl uppercase">Songs</h1>
 			</div>
 			<form className="flex items-center gap-4" action={action}>
+				<LanguagePicker language={language} onLanguageChange={setLanguage} />
 				<MultiSelect
 					className="grow"
 					placeholder="Select genres"

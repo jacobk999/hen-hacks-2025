@@ -41,7 +41,7 @@ export class MoviesProvider implements AiMediaProvider<MovieQuery, Movie> {
 		return {
 			id: movie.id,
 			imdbURL: "https://www.imdb.com/title/" + externalIds.imdb_id,
-			name: movie.title,
+			name: movie.original_title,
 			description: movie.overview,
 
 			language: movie.original_language,
